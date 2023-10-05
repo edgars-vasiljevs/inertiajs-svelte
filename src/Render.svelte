@@ -14,12 +14,17 @@
   export let component
   export let props = {}
   export let children = []
+
+  let update = (c) => c === $store.component.default && (!children || !children.length) ? $store.key : null
+  $: key = update(component) || key
 </script>
 
 {#if $store.component}
-  <svelte:component this={component} {...props}>
-    {#each children as child, index (component && component.length === index ? $store.key : null)}
-      <svelte:self {...child} />
-    {/each}
-  </svelte:component>
+  {#key key}
+    <svelte:component this={component} {...props}>
+      {#each children || [] as child, index (component && component.length === index ? $store.key : null)}
+        <svelte:self {...child} />
+      {/each}
+    </svelte:component>
+  {/key}
 {/if}
