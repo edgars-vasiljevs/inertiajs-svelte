@@ -21,6 +21,9 @@ export default async function createInertiaApp({ id = 'app', resolve, setup, pro
       initialPage,
       resolveComponent,
       swapComponent: async ({ component, page, preserveState }) => {
+        if (initialPage === page) {
+            return
+        }
         store.update((current) => ({
           component,
           page,
